@@ -1,0 +1,34 @@
+{
+    "id": "joao-pessoa-info",
+    "name": "João Pessoa Info Workflow",
+    "description": "Obtém informações de data e hora de João Pessoa",
+    "steps": [
+        {
+            "id": "get-time",
+            "name": "Obter Hora",
+            "type": "rest",
+            "config": {
+                "method": "GET",
+                "url": "https://worldtimeapi.org/api/timezone/America/Sao_Paulo",
+                "headers": {
+                    "Accept": "application/json"
+                }
+            },
+            "required": true,
+            "next": ["format-message"]
+        },
+        {
+            "id": "format-message",
+            "name": "Formatar Mensagem",
+            "type": "transform",
+            "config": {
+                "template": "Current time is {{.time}}. Day of week: {{.weekday}}. Day of year: {{.yearday}}",
+                "mapping": {
+                    "time": "get-time.data.datetime",
+                    "weekday": "get-time.data.day_of_week",
+                    "yearday": "get-time.data.day_of_year"
+                }
+            }
+        }
+    ]
+}
